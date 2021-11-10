@@ -44,6 +44,16 @@ TrojanSourceDetector
 
 and put your project/s full directory to scan.
 
+#### Optional Commands
+
+| Flag | Purpose |
+|------|---------|
+| -Verbose (-v) | Output the lines with problems both as they appear and with the unicode character tag displayed. |
+| -ESC (-e) | Exclude escape character (\u7F) |
+| -BOM (-b) | Exclude Unicode Byte-order Marks (\uFEFF) |
+
+If the first parameter is a valid folder, it will be used instead of prompting the user for a folder to scan.
+
 ## Output / Demo
 
 ![result](https://cdn-images-1.medium.com/max/1200/1*MeZx1jiuqHBAVs3_vXaP8w.png)
