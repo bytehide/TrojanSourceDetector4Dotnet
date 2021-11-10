@@ -10,10 +10,10 @@
     <Description>Easily analyze if your .NET projects have been infected with the tojan source vulnerability.</Description>
     <Copyright>Dotnetsafer</Copyright>
     <PackageId>TrojanSourceDetector</PackageId>
-	<PackAsTool>true</PackAsTool>
-	<ToolCommandName>TrojanSourceDetector</ToolCommandName>
-	<Version>1.0.1</Version>
-	<PackageVersion>1.0.1</PackageVersion>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>TrojanSourceDetector</ToolCommandName>
+    <Version>1.1.0</Version>
+    <PackageVersion>1.1.0</PackageVersion>
   </PropertyGroup>
 
 </Project>
