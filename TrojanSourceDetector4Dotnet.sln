@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrojanSourceDetector4Dotnet", "TrojanSourceDetector4Dotnet.csproj", "{964DC95B-21BB-46C4-8E9F-9FC1814F5AF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrojanSourceDetector", "src\TrojanSourceDetector\TrojanSourceDetector.csproj", "{BC121199-19B1-465E-9B90-F4EEACC0794E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmojiTestApp", "src\EmojiTestApp\EmojiTestApp.csproj", "{B6027EDA-AFC9-4C87-BC53-0861509F432B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{964DC95B-21BB-46C4-8E9F-9FC1814F5AF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{964DC95B-21BB-46C4-8E9F-9FC1814F5AF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{964DC95B-21BB-46C4-8E9F-9FC1814F5AF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{964DC95B-21BB-46C4-8E9F-9FC1814F5AF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC121199-19B1-465E-9B90-F4EEACC0794E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC121199-19B1-465E-9B90-F4EEACC0794E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC121199-19B1-465E-9B90-F4EEACC0794E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC121199-19B1-465E-9B90-F4EEACC0794E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6027EDA-AFC9-4C87-BC53-0861509F432B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6027EDA-AFC9-4C87-BC53-0861509F432B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6027EDA-AFC9-4C87-BC53-0861509F432B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B6027EDA-AFC9-4C87-BC53-0861509F432B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6027EDA-AFC9-4C87-BC53-0861509F432B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
