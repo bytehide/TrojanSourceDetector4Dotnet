@@ -1,4 +1,5 @@
 #r "nuget: System.Text.Json, 6.0.0"
+#load ".\EmojiRecord.cs"
 
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,17 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
+
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 const string FILENAME = @"E:\GitHub\TrojanSourceDetector4Dotnet\src\TrojanSourceDetector\emoji-test.txt";
-const string OUT_FILENAME = @"E:\GitHub\TrojanSourceDetector4Dotnet\src\TrojanSourceDetector\emoji-test.json";
+const string OUT_FILENAME = @"E:\GitHub\TrojanSourceDetector4Dotnet\src\TrojanSourceDetector\emojis.json";
 
 Console.WriteLine(File.Exists(FILENAME));
 
 if(!File.Exists(FILENAME)) return 1;
 
-List<object> Tests = new();
+List<EmojiRecord> Tests = new();
 var lines = File.ReadAllLines(FILENAME).ToArray();
 
 foreach(var line in lines)
@@ -58,7 +60,7 @@ foreach(var line in lines)
     Console.WriteLine($"|{parts[0].Trim()}| {emojiString} | {regexPattern} | {match.Success} | {match.Value} |{parts[1].Trim()}");
     if(!match.Success) throw new ApplicationException($"Could not match {emojiString} to {regexPattern}");
 
-    Tests.Add(new { Emoji = emojiString, RegexPattern = regexPattern, UnicodeParts=parts[0].Trim(), Description=parts[1].Trim() });
+    Tests.Add(new (Emoji: emojiString, RegexPattern: regexPattern, UnicodeParts: parts[0].Trim(), Description: parts[1].Trim() ));
 }
 
 if(Tests.Count > 0)

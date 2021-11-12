@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TrojanSourceDetector": {
+      "commandName": "Project",
+      "commandLineArgs": "e:\\GitHub -whitelist -e -b -v"
+    }
+  }
+}
