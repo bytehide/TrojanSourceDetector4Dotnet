@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>Dotnetsafer</Authors>
+    <PackageProjectUrl>https://dotnetsafer.com</PackageProjectUrl>
+    <Description>Easily analyze if your .NET projects have been infected with the tojan source vulnerability.</Description>
+    <Copyright>Dotnetsafer</Copyright>
+    <PackageId>TrojanSourceDetector</PackageId>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>TrojanSourceDetector</ToolCommandName>
+    <Version>1.2.0</Version>
+    <PackageVersion>1.2.0</PackageVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>$(Authors);@sharpninja</Company>
+    <PackageReleaseNotes>Added emoji whitelist.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="emojis.json" Pack="tools\net6.0\any\emojis.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="test.csx" Pack="tools\net6.0\any\test.csx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="emoji-test.txt" Pack="tools\net6.0\any\emoji-test.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

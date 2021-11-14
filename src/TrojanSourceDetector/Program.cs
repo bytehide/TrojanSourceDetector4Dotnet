@@ -12,13 +12,21 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.RegularExpressions;
+
+using TrojanSourceDetector;
+
+const string wheel = @"|/-\";
+ulong index = 0;
 
 var isVerbose = args.Contains("-verbose") || args.Contains("-Verbose") || args.Contains("-v") || args.Contains("-V");
 var isBom = args.Contains("-bom") || args.Contains("-BOM") || args.Contains("-b") || args.Contains("-B");
 var isEsc = args.Contains("-esc") || args.Contains("-ESC") || args.Contains("-e") || args.Contains("-E");
+var isWhitelist = args.Contains("-whitelist") || args.Contains("-Whitelist") || args.Contains("-w") || args.Contains("-W");
 
-var defaultColor = Console.ForegroundColor;
+var originalColor = Console.ForegroundColor;
+var defaultColor = ConsoleColor.White;
 Console.ForegroundColor = ConsoleColor.DarkCyan;
 
 Console.WriteLine(@"
@@ -62,7 +70,7 @@ UnicodeCategory.Surrogate };
 
 void alert(string text, int line)
 {
-    var defaultForegroundColor = Console.ForegroundColor;
+    var defaultForegroundColor = ConsoleColor.White;
     var defaultBackgroundColor = Console.BackgroundColor;
     Console.ForegroundColor = ConsoleColor.DarkRed;
     Console.Write("[Warning]: ");
@@ -159,6 +167,17 @@ while (path is null or "")
 
 Console.WriteLine();
 
+List<EmojiRecord> whiteList = new();
+
+if (isWhitelist)
+{
+    Console.WriteLine("Using Emoji Whitelist.");
+    var jsonPath = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "emojis.json");
+
+    whiteList = JsonSerializer.Deserialize<List<EmojiRecord>>(File.ReadAllText(jsonPath));
+    Console.WriteLine($"Emoji Whitelist contains {whiteList.Count} definitions.");
+}
+
 
 if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
 {
@@ -179,24 +198,43 @@ var scannedFiles = 0;
 var problemFiles = 0;
 
 var problematicFilesList = new List<(string filename, List<int> lines)>();
-
+var dotnetFilesCount = dotnetFiles.Count();
+Console.WriteLine();
 foreach (var dotnetFile in dotnetFiles)
 {
     if (regex.IsMatch(dotnetFile))
     {
+        if (isVerbose)
+        {
+            //Console.WriteLine($"\b{scannedFiles}/{dotnetFilesCount}: {scannedFiles / dotnetFilesCount:P2}");
+            Tick(ConsoleColor.DarkGreen);
+        }
+        string? currentLine = null;
+
+        var sourceLines = File.ReadAllLines(dotnetFile);
         var lines = new List<int>();
         int lastReportedLine = -1;
         scannedFiles++;
+        int positionInLine = -1;
 
         using StreamReader sr = new StreamReader(dotnetFile);
         int count = 0, line = 0;
         while (sr.Peek() >= 0)
         {
             var c = (char)sr.Read();
-            count++;
+            count++; positionInLine++;
+            if (currentLine is null)
+            {
+                currentLine = sourceLines[line];
+            }
             if (c == '\n')
             {
                 line++;
+                positionInLine = -1;
+                if (line < sourceLines.Length)
+                {
+                    currentLine = sourceLines[line];
+                }
                 continue;
             }
             var category = Char.GetUnicodeCategory(c);
@@ -217,18 +255,62 @@ foreach (var dotnetFile in dotnetFiles)
 
             if (!isPrintable)
             {
-                issuesCount++;
-
-                if (lastReportedLine == -1)
+                if (isVerbose)
                 {
-                    problemFiles++;
+                    Tick(ConsoleColor.DarkRed);
                 }
 
-                if (lastReportedLine != line)
+                var isSurrogate = Char.GetUnicodeCategory(c) == UnicodeCategory.Surrogate;
+                var nextIsSurrogate = Char.GetUnicodeCategory(currentLine[positionInLine + 1]) == UnicodeCategory.Surrogate;
+                var isSafe = false || (isSurrogate && nextIsSurrogate);
+                if (isWhitelist && isSurrogate)
                 {
-                    lines.Add(line);
-                    lastReportedLine = line;
-                    alert(dotnetFile, line);
+                    foreach (var emoji in whiteList)
+                    {
+                        var regexMatcher = new Regex(emoji.RegexPattern);
+
+                        var matches = regexMatcher.Matches(currentLine).Cast<Match>().ToList();
+                        var foundMatch = false;
+
+                        foreach (var match in matches)
+                        {
+                            if (match.Index < positionInLine && match.Index + match.Length > positionInLine)
+                            {
+                                //if (isVerbose)
+                                //{
+                                //    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                //    Console.WriteLine($"Found whitelisted emoji ({emoji.UnicodeParts}) on line {line} of {dotnetFile}, skipping.");
+                                //    Console.ForegroundColor = defaultColor;
+                                //}
+                                foundMatch = true;
+                                break;
+                            }
+                        }
+
+                        isSafe = foundMatch;
+
+                        if (foundMatch)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if (!isWhitelist || (!isSafe && !nextIsSurrogate))
+                {
+                    issuesCount++;
+
+                    if (lastReportedLine == -1)
+                    {
+                        problemFiles++;
+                    }
+
+                    if (lastReportedLine != line)
+                    {
+                        lines.Add(line);
+                        lastReportedLine = line;
+                        alert(dotnetFile, line);
+                    }
                 }
             }
         }
@@ -250,7 +332,7 @@ if (issuesCount == 0)
     Console.ForegroundColor = ConsoleColor.DarkGreen;
     Console.WriteLine();
     Console.WriteLine($"Perfect! No problems have been detected in the analysis of {scannedFiles} files.");
-    Console.ForegroundColor = defaultColor;
+    Console.ForegroundColor = originalColor;
     return;
 }
 
@@ -266,4 +348,13 @@ if (isVerbose)
         var lines = $"{name}: [{string.Join(",", list)}]";
         Console.WriteLine(lines);
     }
+}
+Console.ForegroundColor = originalColor;
+
+void Tick(ConsoleColor color)
+{
+    Console.ForegroundColor = color;
+    Console.Write($"\b{wheel[(int)index % wheel.Length]}");
+    Console.ForegroundColor = defaultColor;
+    index++;
 }
