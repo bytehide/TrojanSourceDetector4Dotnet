@@ -2,7 +2,7 @@
 
 Simple CLI tool that allows you to analyze your .NET projects and detect vulnerabilities related to hidden characters in your source.
 
-[![NuGet Status](http://nugetstatus.com/TrojanSourceDetector.png)](http://nugetstatus.com/packages/TrojanSourceDetector)
+![Nuget](https://img.shields.io/nuget/dt/TrojanSourceDetector)
 
 ## Problem
 
