@@ -2,6 +2,8 @@
 
 Simple CLI tool that allows you to analyze your .NET projects and detect vulnerabilities related to hidden characters in your source.
 
+![Nuget](https://img.shields.io/nuget/dt/TrojanSourceDetector)
+
 ## Problem
 
 According to a recent research by [Cambridge University's Nicholas Boucher and Ross Anderson](https://arxiv.org/abs/2111.00169), there are **two vulnerabilities that impact most code compilers.**
@@ -51,8 +53,11 @@ and put your project/s full directory to scan.
 | -Verbose (-v) | Output the lines with problems both as they appear and with the unicode character tag displayed. |
 | -ESC (-e) | Exclude escape character (\u7F) |
 | -BOM (-b) | Exclude Unicode Byte-order Marks (\uFEFF) |
+| -Whitelist (-w) | Exclude whitelisted emojis (list included in tool) |
 
 If the first parameter is a valid folder, it will be used instead of prompting the user for a folder to scan.
+
+> Emoji whitelist source: https://www.unicode.org/Public/emoji/14.0/emoji-test.txt
 
 ## Output / Demo
 
